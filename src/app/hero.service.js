@@ -24,12 +24,33 @@ var HeroService = (function () {
     function HeroService() {
     }
     HeroService.prototype.getHeroes = function () {
-        return mock_heroes_1.HEROES;
-    }; // stub
+        return Promise.resolve(mock_heroes_1.HEROES);
+    };
+    HeroService.prototype.getHeroesSlowly = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            // Simulate server latency with 2 seconds delay
+            setTimeout(function () { return resolve(_this.getHeroes()); }, 2000);
+        });
+    };
     return HeroService;
 }());
 HeroService = __decorate([
     core_1.Injectable()
 ], HeroService);
 exports.HeroService = HeroService;
+/*
+    The HeroService returns a list of mock heroes immediately; its getHeroes()
+    signature is synchronous.
+    Eventually, the hero data will come from a remote server. When using a
+    remote server, users don't have to wait for the server to respond;
+    additionally, you aren't able to block the UI during the wait.
+    To coordinate the view with the response, you can use Promises, which is an
+    asynchronous technique that changes the signature of the getHeroes() method.
+
+    A Promise essentially promises to call back when the results are ready.
+    You ask an asynchronous service to do some work and give it a callback
+    function. The service does that work and eventually calls the function with
+    the results or an error.
+*/ 
 //# sourceMappingURL=hero.service.js.map

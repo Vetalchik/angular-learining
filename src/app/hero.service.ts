@@ -19,7 +19,28 @@ import { HEROES } from './mock-heroes';
 
 @Injectable()
 export class HeroService {
-  getHeroes(): Hero[] {
-      return HEROES;
-  } // stub
+  getHeroes(): Promise<Hero[]> {
+      return Promise.resolve(HEROES);
+  }
+  getHeroesSlowly(): Promise<Hero[]> {
+    return new Promise(resolve => {
+        // Simulate server latency with 2 seconds delay
+        setTimeout(() => resolve(this.getHeroes()), 2000);
+    });
+  }
 }
+
+/*
+    The HeroService returns a list of mock heroes immediately; its getHeroes() 
+    signature is synchronous.
+    Eventually, the hero data will come from a remote server. When using a 
+    remote server, users don't have to wait for the server to respond;
+    additionally, you aren't able to block the UI during the wait.
+    To coordinate the view with the response, you can use Promises, which is an
+    asynchronous technique that changes the signature of the getHeroes() method.
+
+    A Promise essentially promises to call back when the results are ready.
+    You ask an asynchronous service to do some work and give it a callback 
+    function. The service does that work and eventually calls the function with 
+    the results or an error.
+*/
