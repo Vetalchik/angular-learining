@@ -42,6 +42,8 @@ import { HeroService } from './hero.service';
 
          Now every time the selectedHero changes, the HeroDetailComponent gets 
          a new hero to display.
+
+         But this binding won't work in any of the routing scenarios.
      */
   styles: [`
     .selected {

@@ -17,10 +17,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     hero-detail.component.ts file.
 */
 var core_1 = require("@angular/core"); // Component - це символ, який ми завжди повинні імпортувати, щоб визначити комонент
+var router_1 = require("@angular/router");
+var common_1 = require("@angular/common");
+require("rxjs/add/operator/switchMap");
+var hero_service_1 = require("./hero.service");
 var hero_1 = require("./hero");
 var HeroDetailComponent = (function () {
-    function HeroDetailComponent() {
+    function HeroDetailComponent(heroService, route, location) {
+        this.heroService = heroService;
+        this.route = route;
+        this.location = location;
     }
+    HeroDetailComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.switchMap(function (params) {
+            return _this.heroService.getHero(+params['id']);
+        })
+            .subscribe(function (hero) { return _this.hero = hero; });
+        /*
+           The switchMap operator maps the id in the Observable route parameters
+           to a new Observable, the result of the HeroService.getHero() method.
+
+           If a user re-navigates to this component while a getHero request is
+           still processing, switchMap cancels the old request and then calls
+           HeroService.getHero() again.
+
+           The hero id is a number. Route parameters are always strings. So the
+           route parameter value is converted to a number with the
+           JavaScript (+) operator.
+        */
+    };
+    HeroDetailComponent.prototype.goBack = function () {
+        this.location.back();
+    };
     return HeroDetailComponent;
 }());
 __decorate([
@@ -30,8 +59,17 @@ __decorate([
 HeroDetailComponent = __decorate([
     core_1.Component({
         selector: 'hero-detail',
-        template: "\n        <div *ngIf=\"hero\">\n        <h2>{{hero.name}} details!</h2>\n        <div><label>id: </label>{{hero.id}}</div>\n        <div>\n            <label>name: </label>\n            <input [(ngModel)]=\"hero.name\" placeholder=\"name\"> \n        </div>\n        </div>\n    ",
-    })
+        templateUrl: './hero-detail.component.html',
+    }),
+    __metadata("design:paramtypes", [hero_service_1.HeroService,
+        router_1.ActivatedRoute,
+        common_1.Location])
 ], HeroDetailComponent);
 exports.HeroDetailComponent = HeroDetailComponent;
+/*
+    You'll no longer receive the hero in a parent component property binding.
+    The new HeroDetailComponent should take the id parameter from the
+    params Observable in the ActivatedRoute service and use the HeroService
+    to fetch the hero with that id.
+*/
 //# sourceMappingURL=hero-detail.component.js.map

@@ -17,13 +17,20 @@ import { DashboardComponent } from './dashboard.component';
       {
         path: 'heroes',
         component: HeroesComponent
-      }, {
+      },{
         path: 'dashboard',
         component: DashboardComponent
-      }, {
+      },{
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
+      },{
+        path: 'detail/:id',
+        component: HeroDetailComponent
+        /*
+         The colon (:) in the path indicates that :id is a placeholder for a 
+         specific hero id when navigating to the HeroDetailComponent.
+        */
       }
     /*
       The forRoot() method is called because a configured router is provided
