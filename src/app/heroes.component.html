@@ -1,0 +1,48 @@
+<h2>My Heroes</h2>
+    <ul class="heroes">
+      <li *ngFor="let hero of heroes"
+        [class.selected]="hero === selectedHero"
+        (click)="onSelect(hero)"> 
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </li>
+    <ul>
+    <div *ngIf="selectedHero">
+      <h2>
+        {{selectedHero.name | uppercase}} is my hero
+      </h2>
+      <button (click)="gotoDetail()">View Details</button>
+</div>
+<!--
+     //<hero-detail [hero]="selectedHero"></hero-detail>
+     // interpolation bindings представляють значення властивостей title, hero компонента
+     // [(ngModel)]="hero.name" - це two-way binding. Data flows in both directions
+     // ngModel - valid Angular directive, isn't available by default
+     // '*' префікс для ngFor вказує, що елемент <li> і його діти складають головний шаблон
+     // The ngFor directive iterates over the component's heroes array and renders an instance of this template for each hero in that array.
+     // The let hero part of the expression identifies hero as the template input variable, which holds the current hero item for each iteration. You can reference this variable within the template to access the current hero's properties.
+     /*
+         The parentheses identify the <li> element's click event as the target.
+         The onSelect(hero) expression calls the AppComponent method, onSelect(),
+         passing the template input variable hero, as an argument. That's the
+         same hero variable you defined previously in the ngFor directive.
+
+         When the expression (hero === selectedHero) is true, Angular adds the selected CSS class.
+         When the expression is false, Angular removes the selected class.
+         Як часто цей вираз перевіряєтся?
+
+         !
+         Putting square brackets around the hero property, to the left of the equal sign (=),
+         makes it the target of a property binding expression. You must declare a 
+         target binding property to be an input property. Otherwise, Angular rejects
+         the binding and throws an error.
+
+         Coordinate the master AppComponent with the HeroDetailComponent by
+         binding the selectedHero property of the AppComponent to the hero
+         property of the HeroDetailComponent.
+
+         Now every time the selectedHero changes, the HeroDetailComponent gets 
+         a new hero to display.
+
+         But this binding won't work in any of the routing scenarios.
+     */
+-->

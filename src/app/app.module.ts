@@ -8,37 +8,42 @@ import { HeroDetailComponent } from './hero-detail.component'; //Every component
 import { HeroesComponent } from './heroes.component';
 import { HeroService } from './hero.service';
 import { DashboardComponent } from './dashboard.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot([
-      {
-        path: 'heroes',
-        component: HeroesComponent
-      },{
-        path: 'dashboard',
-        component: DashboardComponent
-      },{
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },{
-        path: 'detail/:id',
-        component: HeroDetailComponent
-        /*
-         The colon (:) in the path indicates that :id is a placeholder for a 
-         specific hero id when navigating to the HeroDetailComponent.
-        */
-      }
+    AppRoutingModule,
+    // RouterModule.forRoot([
+    //   {
+    //     path: 'heroes',
+    //     component: HeroesComponent
+    //   },{
+    //     path: 'dashboard',
+    //     component: DashboardComponent
+    //   },{
+    //     path: '',
+    //     redirectTo: 'dashboard',
+    //     pathMatch: 'full'
+    //   },{
+    //     path: 'detail/:id',
+    //     component: HeroDetailComponent
+    //     /*
+    //      The colon (:) in the path indicates that :id is a placeholder for a 
+    //      specific hero id when navigating to the HeroDetailComponent.
+    //     */
+    //   }
     /*
       The forRoot() method is called because a configured router is provided
       at the app's root. The forRoot() method supplies the Router service 
       providers and directives needed for routing, and performs the initial
       navigation based on the current browser URL.
+
+      The current RouterModule.forRoot() produces an Angular ModuleWithProviders,
+      a class dedicated to routing should be a routing module.
     */
-])
+    //])
 
   ], //включення модуля в програму
   declarations: [ 

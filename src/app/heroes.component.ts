@@ -1,100 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Hero } from './hero';
 import { HeroService } from './hero.service';
 
 @Component({ // декоратор
   selector: 'my-heroes',
-  template: `
-    <h2>My Heroes</h2>
-    <ul class="heroes">
-      <li *ngFor="let hero of heroes"
-        [class.selected]="hero === selectedHero"
-        (click)="onSelect(hero)"> 
-        <span class="badge">{{hero.id}}</span> {{hero.name}}
-      </li>
-    <ul>
-    <hero-detail [hero]="selectedHero"></hero-detail>
-  `, // interpolation bindings представляють значення властивостей title, hero компонента
-     // [(ngModel)]="hero.name" - це two-way binding. Data flows in both directions
-     // ngModel - valid Angular directive, isn't available by default
-     // '*' префікс для ngFor вказує, що елемент <li> і його діти складають головний шаблон
-     // The ngFor directive iterates over the component's heroes array and renders an instance of this template for each hero in that array.
-     // The let hero part of the expression identifies hero as the template input variable, which holds the current hero item for each iteration. You can reference this variable within the template to access the current hero's properties.
-     /*
-         The parentheses identify the <li> element's click event as the target.
-         The onSelect(hero) expression calls the AppComponent method, onSelect(),
-         passing the template input variable hero, as an argument. That's the
-         same hero variable you defined previously in the ngFor directive.
-
-         When the expression (hero === selectedHero) is true, Angular adds the selected CSS class.
-         When the expression is false, Angular removes the selected class.
-         Як часто цей вираз перевіряєтся?
-
-         !
-         Putting square brackets around the hero property, to the left of the equal sign (=),
-         makes it the target of a property binding expression. You must declare a 
-         target binding property to be an input property. Otherwise, Angular rejects
-         the binding and throws an error.
-
-         Coordinate the master AppComponent with the HeroDetailComponent by
-         binding the selectedHero property of the AppComponent to the hero
-         property of the HeroDetailComponent.
-
-         Now every time the selectedHero changes, the HeroDetailComponent gets 
-         a new hero to display.
-
-         But this binding won't work in any of the routing scenarios.
-     */
-  styles: [`
-    .selected {
-      background-color: #CFD8DC !important;
-      color: white;
-    }
-    .heroes {
-      margin: 0 0 2em 0;
-      list-style-type: none;
-      padding: 0;
-      width: 15em;
-    }
-    .heroes li {
-      cursor: pointer;
-      position: relative;
-      left: 0;
-      background-color: #EEE;
-      margin: .5em;
-      padding: .3em 0;
-      height: 1.6em;
-      border-radius: 4px;
-    }
-    .heroes li.selected:hover {
-      background-color: #BBD8DC !important;
-      color: white;
-    }
-    .heroes li:hover {
-      color: #607D8B;
-      background-color: #DDD;
-      left: .1em;
-    }
-    .heroes .text {
-      position: relative;
-      top: -3px;
-    }
-    .heroes .badge {
-      display: inline-block;
-      font-size: small;
-      color: white;
-      padding: 0.8em 0.7em 0 0.7em;
-      background-color: #607D8B;
-      line-height: 1em;
-      position: relative;
-      left: -1px;
-      top: -4px;
-      height: 1.8em;
-      margin-right: .8em;
-      border-radius: 4px 0 0 4px;
-    }
-  `],
+  templateUrl: './heroes.component.html', 
+  styleUrls: [ './heroes.component.css' ],
     /*
+      The styleUrls property is an array of style file names (with paths). You
+      could list multiple style files from different locations if you needed them.
+
       When you assign styles to a component, they are scoped to that specific component.
       These styles apply only to the AppComponent and don't affect the outer HTML.
     
@@ -121,7 +37,7 @@ export class HeroesComponent implements OnInit {
     method, Angular calls it at the appropriate time.
   */
 
-  constructor(private heroService: HeroService) {}
+  constructor(private heroService: HeroService, private router: Router) {}
   /*
     The constructor itself does nothing. The parameter simultaneously defines
     a private heroService property and identifies it as a HeroService injection
@@ -147,6 +63,10 @@ export class HeroesComponent implements OnInit {
 
   getHeroes(): void {
     this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+
+  gotoDetail(): void {
+    this.router.navigate(['/detail', this.selectedHero.id]);
   }
   /*
     As a result of the change to HeroService, this.heroes is now set to a Promise

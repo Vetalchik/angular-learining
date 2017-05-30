@@ -19,6 +19,7 @@ import { Hero } from './hero';
 @Component({ // @Component декоратор забезпечує Angular метаданими для компонента
     selector: 'hero-detail', // CSS selector name, hero-detail, will match the element tag that identifies this component within a parent component's template.
     templateUrl: './hero-detail.component.html',
+    styleUrls: ['./hero-detail.component.css'],
 })
 
 export class HeroDetailComponent implements OnInit { // Always export the component class because you'll always import it elsewhere.

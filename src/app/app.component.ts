@@ -5,13 +5,18 @@ import { Component } from '@angular/core';
   template: `
     <h1>{{title}}</h1>
     <nav>
-      <a routerLink="/dashboard">Dashboard</a>
-      <a routerLink="/heroes">Heroes</a>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
     </nav>
     <router-outlet></router-outlet>
   `,
+  styleUrls: ['./app.component.css'],
 })
 /*
+  The Angular router provides a routerLinkActive directive you can use to add
+  a class to the HTML navigation element whose route matches the active route.
+  All you have to do is define the style for it.
+
   If you paste the path, /heroes, into the browser address bar at the end of
   the URL, the router should match it to the heroes route and display
   the HeroesComponent. However, you have to tell the router where to display 
