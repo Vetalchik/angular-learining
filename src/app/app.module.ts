@@ -2,6 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; //імпорт модуля
 import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { HeroDetailComponent } from './hero-detail.component'; //Every component must be declared in one—and only one—Angular module.
@@ -10,11 +11,28 @@ import { HeroService } from './hero.service';
 import { DashboardComponent } from './dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 
+// Imports for loading & configuring the in-memory web api
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDataService } from './in-memory-data.service';
+
+/*
+  Rather than require a real API server, this example simulates communication
+  with the remote server by adding the InMemoryWebApiModule to the module 
+  imports, effectively replacing the Http client's XHR backend service with
+  an in-memory alternative.
+*/
+
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
+    /*
+      The forRoot() configuration method takes an InMemoryDataService class that
+      primes the in-memory database.
+    */
     // RouterModule.forRoot([
     //   {
     //     path: 'heroes',
@@ -41,11 +59,18 @@ import { AppRoutingModule } from './app-routing.module';
       navigation based on the current browser URL.
 
       The current RouterModule.forRoot() produces an Angular ModuleWithProviders,
-      a class dedicated to routing should be a routing module.
+      a class dedicated to routing should be a routing module
     */
     //])
 
   ], //включення модуля в програму
+  /*
+    The app will depend on the Angular http service, which itself depends on 
+    other supporting services. The HttpModule from the @angular/http library
+    holds providers for a complete set of HTTP services.
+    To allow access to these services from anywhere in the app, add HttpModule
+    to the imports list of the AppModule.
+  */
   declarations: [ 
     AppComponent,
     HeroesComponent,
@@ -64,6 +89,8 @@ import { AppRoutingModule } from './app-routing.module';
     That move created a singleton HeroService instance, available to all
     components of the app. Angular injects HeroService and you can use it
     in the DashboardComponent.
+
+    We recommend registering app-wide services in the root AppModule providers.
   */
 })
 export class AppModule { 

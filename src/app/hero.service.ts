@@ -13,21 +13,52 @@
 */
 
 import { Injectable } from '@angular/core';
+import { Headers, Http } from '@angular/http';
+
+import 'rxjs/add/operator/toPromise';
+
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
+
 
 
 @Injectable()
 export class HeroService {
+
+  private heroesUrl = 'api/heroes'; //URL to web api
+
+  constructor(private http: Http) {}
+
   getHeroes(): Promise<Hero[]> {
-      return Promise.resolve(HEROES);
+      return this.http.get(this.heroesUrl)
+        .toPromise()
+        .then(response => response.json().data as Hero[])
+        .catch(this.handleError);
   }
+
+  /*
+    The Angular http.get returns an RxJS Observable. Observables are a powerful 
+    way to manage asynchronous data flows. 
+    For now, you've converted the Observable to a Promise using the toPromise
+    operator.
+    The Angular Observable doesn't have a toPromise operator out of the box.
+    There are many operators like toPromise that extend Observable with useful
+    capabilities. To use those capabilities, you have to add the operators 
+    themselves. That's as easy as importing them from the RxJS library like this:
+    import 'rxjs/add/operator/toPromise';
+  */
+
   getHeroesSlowly(): Promise<Hero[]> {
     return new Promise(resolve => {
         // Simulate server latency with 2 seconds delay
         setTimeout(() => resolve(this.getHeroes()), 2000);
     });
   }
+
+  private handleError(error: any): Promise<any> {
+      console.error('An error occured', error); //for demo purposes only
+      return Promise.reject(error.message || error);
+  }
+
   getHero(id: number): Promise<Hero> {
     return this.getHeroes()
         .then(heroes => heroes.find(hero => hero.id === id));
